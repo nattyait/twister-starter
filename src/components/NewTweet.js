@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import config from '../config'
 
 class NewTweet extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class NewTweet extends Component {
   }
   handleOnKeyDown(event) {
     if (event.keyCode !== 13) {
-       return
+      return
     }
     event.preventDefault()
     this.addTweet({
@@ -35,10 +36,21 @@ class NewTweet extends Component {
     })
   }
   addTweet(tweet) {
-    console.log(tweet)
-    this.props.addToTweetList(tweet)
-    this.setState({
-      tweetText: '',
+    fetch(`http://${config.api.host}:${config.api.port}/api/tweets`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      body: JSON.stringify(tweet),
+    })
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({
+        tweetText: '',
+      })
+      this.props.addToTweetList(data)
     })
   }
   render() {
