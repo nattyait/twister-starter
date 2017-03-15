@@ -3,8 +3,8 @@ import React, { PropTypes } from 'react'
 const Tweet = ({ name, username, tweetText }) => (
   <div className="tweet">
     <div className="name">{name}</div>
-    <div className="username">{username}</div>
-    <div className="tweetText">{tweetText}</div>
+    <div className="screen-name">@{username}</div>
+    <div className="tweet-text">{tweetText}</div>
   </div>
 )
 
