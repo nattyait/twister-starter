@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import MainPanel from './MainPanel'
 import Profile from './Profile'
-import config from '../config'
+// import config from '../config'
+import { fetchTweets, fetchProfile, fetchFollowStatus } from '../helpers'
 
 class BodyContainer extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class BodyContainer extends Component {
     this.addToTweetList = this.addToTweetList.bind(this)
   }
   componentDidMount() {
+  /*
     const uri = `http://${config.api.host}:${config.api.port}/api/tweets`
     const filter = `{"where":{"username":"${this.state.username}"}}`
 
@@ -26,6 +28,17 @@ class BodyContainer extends Component {
           tweets, // tweets: tweets
         })
       })
+  */
+    const fetchedData = {}
+    fetchTweets(this.props.ownerUsername)
+    .then((tweets) => { fetchedData.tweets = tweets })
+    .then(() => fetchProfile(this.props.ownerUsername))
+    .then((profile) => { fetchedData.numFollowers = profile.numFollowers })
+    .then(() => fetchFollowStatus(this.state.username, this.props.ownerUsername))
+    .then((status) => {
+      fetchedData.isFollowing = status
+      this.setState(fetchedData)
+    })
   }
   addToTweetList(tweet) {
     const tweetWithId = tweet
