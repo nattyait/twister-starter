@@ -1,21 +1,7 @@
 import React from 'react'
-import MainPanel from './MainPanel'
-import Profile from './Profile'
+import BodyContainer from './BodyContainer'
 
 const App = () => (
-  <div>
-    <Profile
-      name="Nattanicha"
-      username="nattyait"
-      numTweets={123}
-      numFollowers={123}
-      numFollowings={123}
-      isFollowing
-      isOwnProfile
-      handleToggleFollow={() => { console.log('toggle!!!!') }}
-    />
-    <MainPanel enableTweet />
-  </div>
+  <BodyContainer ownerUsername="nattyait" enableTweet />
 )
-
 export default App
