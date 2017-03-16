@@ -8,9 +8,11 @@ class BodyContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: 'Nattanicha',
       username: 'nattyait',
       tweets: [],
+      numFollowers: 0,
+      numFollowings: 0,
+      isFollowing: false,
     }
     this.addToTweetList = this.addToTweetList.bind(this)
   }
@@ -30,11 +32,15 @@ class BodyContainer extends Component {
       })
   */
     const fetchedData = {}
-    fetchTweets(this.props.ownerUsername)
+    const ownerUsername = this.props.ownerUsername || this.state.username
+    fetchTweets(ownerUsername)
     .then((tweets) => { fetchedData.tweets = tweets })
-    .then(() => fetchProfile(this.props.ownerUsername))
-    .then((profile) => { fetchedData.numFollowers = profile.numFollowers })
-    .then(() => fetchFollowStatus(this.state.username, this.props.ownerUsername))
+    .then(() => fetchProfile(ownerUsername))
+    .then((profile) => {
+      fetchedData.numFollowers = profile.numFollowers
+      fetchedData.numFollowings = profile.numFollowings
+    })
+    .then(() => fetchFollowStatus(this.state.username, ownerUsername))
     .then((status) => {
       fetchedData.isFollowing = status
       this.setState(fetchedData)
@@ -53,17 +59,18 @@ class BodyContainer extends Component {
   }
   render() {
     const { name, username, tweets } = this.state
+    const ownerUsername = this.props.ownerUsername || this.state.username
+    const isOwnProfile = this.state.username === ownerUsername
     return (
       <div className="container body">
         <div className="left-panel">
           <Profile
+            {...this.state}
             name="Nattanicha"
             username={this.props.ownerUsername}
             numTweets={123}
-            numFollowers={123}
-            numFollowings={123}
             isFollowing
-            isOwnProfile
+            isOwnProfile={isOwnProfile}
             handleToggleFollow={() => { console.log('toggle!!!!') }}
           />
         </div>
